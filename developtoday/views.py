@@ -1,23 +1,28 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from .models import Post, Comments
 from .serializers import PostSerializer, CommentsSerializer
 
 
-class PostAPIList(generics.ListCreateAPIView):
+class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
 
-class PostAPIUpdate(generics.UpdateAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
-
-class PostAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+# class PostAPIList(generics.ListCreateAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+#
+#
+# class PostAPIUpdate(generics.UpdateAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+#
+#
+# class PostAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
 
 
 class CommentsAPIView(APIView):
