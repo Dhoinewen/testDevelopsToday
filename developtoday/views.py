@@ -1,12 +1,23 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import generics
 from .models import Post, Comments
 from .serializers import PostSerializer, CommentsSerializer
 
 
-# class PostAPIList(generics.ListCreateAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
+class PostAPIList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostAPIUpdate(generics.UpdateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 
 class CommentsAPIView(APIView):
@@ -48,40 +59,40 @@ class CommentsAPIView(APIView):
             return Response({"error": 'Comment doest exist'})
 
 
-class PostAPIView(APIView):
-    def get(self, request):
-        posts = Post.objects.all()
-        return Response({'posts': PostSerializer(posts, many=True).data})
-
-    def post(self, request):
-        serializer = PostSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({'post': serializer.data})
-
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        if not pk:
-            return Response({'error': 'Method Put now allowed'})
-
-        try:
-            instance = Post.objects.get(pk=pk)
-        except:
-            return Response({'error': 'Object not exists'})
-
-        serializer = PostSerializer(data=request.data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"post": serializer.data})
-
-    def delete(self,  request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        if not pk:
-            return Response({'error': 'Method Put now allowed'})
-
-        try:
-            post = Post.objects.get(pk=pk)
-            post.delete()
-            return Response({"Yep": 'Yep'})
-        except:
-            return Response({"error": 'Post doest exist'})
+# class PostAPIView(APIView):
+#     def get(self, request):
+#         posts = Post.objects.all()
+#         return Response({'posts': PostSerializer(posts, many=True).data})
+#
+#     def post(self, request):
+#         serializer = PostSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({'post': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get('pk', None)
+#         if not pk:
+#             return Response({'error': 'Method Put now allowed'})
+#
+#         try:
+#             instance = Post.objects.get(pk=pk)
+#         except:
+#             return Response({'error': 'Object not exists'})
+#
+#         serializer = PostSerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({"post": serializer.data})
+#
+#     def delete(self,  request, *args, **kwargs):
+#         pk = kwargs.get('pk', None)
+#         if not pk:
+#             return Response({'error': 'Method Put now allowed'})
+#
+#         try:
+#             post = Post.objects.get(pk=pk)
+#             post.delete()
+#             return Response({"Yep": 'Yep'})
+#         except:
+#             return Response({"error": 'Post doest exist'})
